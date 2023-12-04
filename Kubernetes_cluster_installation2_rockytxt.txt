@@ -1,0 +1,64 @@
+#### Make sure you execute common installation script before executing following commands. ###
+######Start cluster initialization on master node
+Give the following commands only on master node.
+1. Configure following firewall rules 
+sudo firewall-cmd --permanent --add-port={6443,2379,2380,10250,10251,10252,10257,10259,179}/tcp
+sudo firewall-cmd --permanent --add-port=4789/udp
+sudo firewall-cmd --reload
+
+2. sudo kubeadm init --control-plane-endpoint=master
+3. copy the join token
+4. mkdir -p $HOME/.kube
+   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   sudo chown $(id -u):$(id -g) $HOME/.kube/config
+4. Add network addon
+   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+1. if you have not copied the join token then give following command on the master
+   kubeadm token create --print-join-command
+
+
+
+################# Run following on the worker nodes
+
+OPen following firewall ports
+
+sudo firewall-cmd --permanent --add-port={179,10250,30000-32767}/tcp
+sudo firewall-cmd --permanent --add-port=4789/udp
+sudo firewall-cmd --reload
+
+
+then run the join token
+
+#################Install Dashboard
+
+On master node execute
+
+1. kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
+2. Kubectl proxy
+3. http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+4. grep 'client-certificate-data' ~/.kube/config | head -n 1 | awk '{print $2}' | base64 -d >> kubecfg.crt
+5. grep 'client-key-data' ~/.kube/config | head -n 1 | awk '{print $2}' | base64 -d >> kubecfg.key
+6. openssl pkcs12 -export -clcerts -inkey kubecfg.key -in kubecfg.crt -out kubecfg.p12 -name "kubernetes-client"
+7. Create a yaml file to create a service account and add following.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dash-admin
+  namespace: kube-system
+8. Create a yaml file to create cluster role binding and add following
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dash-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: dash-admin
+  namespace: kube-system
+9. kubectl apply -f above .yaml files one by one.
+10. Generate the token
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+11. Copy the token and paste in the kubernetes dashboard url
