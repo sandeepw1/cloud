@@ -1,0 +1,92 @@
+AWS lambda ---- example 2
+import json
+
+def lambda_handler(event, context):
+   if event['student_id'] == "001" :
+       return 'The student ID 001 is Mr.Rohan'
+   elif event['student_id'] == "002" :
+       return 'The student ID 002 is Ms. Kavita'
+   elif event['student_id'] == "003" :
+       return 'The student ID 003 is Mr. Mahesh'
+   else :
+       return 'Unknown student ID'
+
+Above code for lambda function with URL
+
+import json
+
+def lambda_handler(event, context):
+    
+    student_id = event["queryStringParameters"]['student']
+    if student_id == "001" :
+       return {
+        'statusCode': 200,
+        'body': json.dumps('The Student ID 001 is Mr.Rakesh!')
+       }
+    elif student_id == "002" :
+       return {
+        'statusCode': 200,
+        'body': json.dumps('The Student ID 002 is Ms.Kavita!')
+       }
+    elif student_id == "003" :
+       return {
+        'statusCode': 200,
+        'body': json.dumps('The Student ID 003 is Mr.Mahesh!')
+       }
+    else :
+       return {
+        'statusCode': 200,
+        'body': json.dumps('Unknown Student ID!')
+       }
+
+try following URL
+https://your-lambda-function-url/?student=003
+
+AWS lambda function URL example 2
+
+import json
+
+def lambda_handler(event, context):
+    
+    x = int(event["queryStringParameters"]['num1'])
+    y = int(event["queryStringParameters"]['num2'])
+    
+    result = x * y
+    return {
+        'statusCode': 200,
+        'body': "The product of 2 numbers is:" + str(result) 
+       }
+    
+try URL to test
+https://your-lambda-function-url/?num1=10&num2=5
+
+
+Lambda Function with AWS API Gateway HTTP
+
+import json
+import uuid
+
+GET_PATH = "/getstudent"
+POST_PATH = "/addstudent"
+
+def lambda_handler(event, context):
+    if event['rawPath'] == GET_PATH :
+        student_id = event["queryStringParameters"]['student_id']
+        if student_id == '001':
+            return { "Firstname": "Rakesh", "Surname": "Dev" }
+        elif student_id == '002':
+            return { "Firstname": "Soham", "Surname": "Shah" }
+    
+    elif event['rawPath'] == POST_PATH :
+        eventBody = json.loads(event["body"])
+        fname = eventBody["Firstname"]
+        return {
+            'statusCode': 200,
+            'body': "The user  " + fname + " is added successfully with ID " + str(uuid.uuid1()),
+            
+        }
+
+try URL
+http://api-gateway-url/getstudent?student_id=001
+
+for post method use postman.
