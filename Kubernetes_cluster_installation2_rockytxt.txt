@@ -6,7 +6,7 @@ sudo firewall-cmd --permanent --add-port={6443,2379,2380,10250,10251,10252,10257
 sudo firewall-cmd --permanent --add-port=4789/udp
 sudo firewall-cmd --reload
 
-2. sudo kubeadm init --control-plane-endpoint=master
+2. sudo kubeadm init --pod-network-cidr=10.244.0.0/16  --control-plane-endpoint=master
 3. copy the join token
 4. mkdir -p $HOME/.kube
    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
