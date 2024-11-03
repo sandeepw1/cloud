@@ -2,8 +2,6 @@ echo "######### This script will install Kubernetes #############
 echo "#### Common Installation script ######"
 echo "##### Execute on Manager and worker nodes also ####"
 sleep 5 
-sudo sed -i 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
-sudo setenforce 0
 ###Enable br_netfilter kernel module
 sudo tee /etc/modules-load.d/containerd.conf <<EOF
 overlay
