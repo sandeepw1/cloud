@@ -1,0 +1,164 @@
+    1  sudo yum update -y
+    2  su -
+    3  sudo yum update -y
+    4  sudo init 0
+    5  sudo iptables -L
+    6  clear
+    7  sudo iptables -P INPUT DROP 
+    8  ls
+    9  sudo iptables -L
+   10  exit
+   11  ls
+   12  sudo iptables -L 
+   13  clear
+   14  sudo iptables -L 
+   15  clear
+   16  sudo iptables --flush
+   17  clear
+   18  sudo iptables -L
+   19  clear
+   20  sudo iptables -P INPUT ACCEPT
+   21  sudo init 0
+   22  ip a
+   23  clear
+   24  sudo iptables -L
+   25  clear
+   26  sudo iptables -P OUTPUT REJECT
+   27  sudo iptables -P OUTPUT ACCEPT
+   28  sudo iptables -L
+   29  clear
+   30  sudo iptables -L
+   31  clear
+   32  sudo systemctl restart iptables
+   33  sudo iptables -L
+   34  ip a
+   35  clear
+   36  echo /proc/sys/net/ipv4/ip_forward
+   37  cat /proc/sys/net/ipv4/ip_forward
+   38  echo 1 > /proc/sys/net/ipv4/ip_forward
+   39  sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+   40  echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+   41  cat /proc/sys/net/ipv4/ip_forward
+   42  clear
+   43  sudo init 6
+   44  clear
+   45  sudo yum install docker -y
+   46  clear
+   47  sudo systemctl start docker 
+   48  sudo systemctl start podman
+   49  clear
+   50  sudo  docker images
+   51  sudo docker ps
+   52  sudo docker ps -a 
+   53  clear
+   54  ip a
+   55  clear
+   56  sudo docker images
+   57  sudo docker pull ubuntu
+   58  clear
+   59  sudo docker images
+   60  sudo docker ps
+   61  clear
+   62  sudo docker pull httpd
+   63  clear
+   64  sudo docker images
+   65  clear
+   66  sudo docker run ubuntu
+   67  sudo docker ps
+   68  sudo docker ps -a
+   69  clear
+   70  sudo docker ps -a
+   71  sudo docker rm 6a33332e7f67
+   72  sudo docker ps -a
+   73  clear
+   74  sudo docker run -ti ubuntu
+   75  sudo docker ps
+   76  sudo docker ps -a
+   77  clear
+   78  sudo docker run -ti ubuntu
+   79  clear
+   80  sudo docker ps
+   81  sudo docker ps -a
+   82  sudo docker rm cb4e924e50be
+   83  clear
+   84  sudo docker ps -a 
+   85  sudo docker start f74170fd1548
+   86  sudo docker ps -
+   87  sudo docker ps 
+   88  clear
+   89  sudo docker attach f74170fd1548
+   90  clear
+   91  sudo docker ps
+   92  sudo docker ps -a
+   93  clear
+   94  sudo docker ps -a
+   95  docker start happy_wilbur
+   96  sudo docker start happy_wilbur
+   97  clear
+   98  sudo docker ps
+   99  sudo docker exec happy_wilbur ls
+  100  clear
+  101  sudo docker exec happy_wilbur cat /hpcsa/test.txt
+  102  sudo docker ps
+  103  clear
+  104  sudo docker exec happy_wilbur apt install python-y
+  105  sudo docker exec happy_wilbur apt install python -y
+  106  sudo docker exec happy_wilbur apt install python2 -y
+  107  sudo docker exec happy_wilbur apt install python2.7 -y
+  108  sudo docker exec happy_wilbur apt install python3 -y
+  109  clear
+  110  sudo docker exec happy_wilbur python
+  111  sudo docker exec happy_wilbur python3
+  112  clear
+  113  sudo docker attach happy_wilbur
+  114  clear
+  115  sudo docker 
+  116  clear
+  117  sudo docker commit 
+  118  sudo docker commit -h
+  119  clear
+  120  sudo docker ps -a
+  121  sudo docker commit f74170fd1548 hp-python3  
+  122  clear
+  123  sudo docker images
+  124  clear
+  125  sudo docker ps
+  126  sudo docker ps -a
+  127  sudo docker rm f74170fd1548
+  128  clear
+  129  sudo docker ps
+  130  sudo docker ps -a
+  131  clear
+  132  sudo docker images
+  133  sudo docker run --name p1 hp-python3
+  134  clear
+  135  sudo docker ps -a
+  136  sudo docker rm p1
+  137  clear
+  138  sudo docker run --name p1 -ti hp-python3
+  139  sudo docker ps -a
+  140  sudo docker rm p1
+  141  clear
+  142  sudo docker run --name p1 -ti hp-python3 python3
+  143  clear
+  144  history
+  145  clear
+  146  sudo docker run --name web1 
+  147  sudo docker run --name web1 httpd
+  148  clear
+  149  sudo docker ps -a
+  150  clear
+  151  sudo docker rm p1 web1
+  152  sudo docker run --name web1 -d -p 8000:80 httpd 
+  153  sudo docker ps 
+  154  clear
+  155  curl http://localhost
+  156  curl http://localhost:8000
+  157  ip a
+  158  clear
+  159  curl http://192.168.230.145
+  160  curl http://192.168.230.145:8000
+  161  clear
+  162  history 
+  163  clear
+  164  history > docker-history.txt
