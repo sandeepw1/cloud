@@ -1,0 +1,46 @@
+Install Jenkins as a service in Ubuntu
+
+1.
+sudo  apt update  -y
+
+2.Install Java 
+sudo apt install openjdk-17-jdk -y
+
+3.Add Jenkins repository key
+
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+4.Add Jenkins repository
+
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+5.Install Jenkins
+
+sudo apt-get update
+sudo apt-get install jenkins
+
+6.Start Jenkins service and enable for auto-start
+
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+Jenkins uses port 8080.
+
+From browser access http://your-machine-ip:8080
+ 
+
+Install Jenkins on Windows
+
+Install Java 17 or Java 21.
+You may download the Microsoft build of Open-jdk Java from following link.
+
+https://aka.ms/download-jdk/microsoft-jdk-17.0.13-windows-x64.msi
+
+ Download Jenkins installer for Windows.
+
+https://www.jenkins.io/download/thank-you-downloading-windows-installer-stable
+
+Once the installer download, double click it to start installation.
