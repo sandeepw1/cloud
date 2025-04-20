@@ -54,3 +54,6 @@ echo "#######Installation completed successfully #####"
 echo "#### Performing Master Specific Configuration ########"
 sleep 5
 echo "######Start cluster initialization on Node#####"
+sudo firewall-cmd --permanent --add-port={179,10250,30000-32767}/tcp
+sudo firewall-cmd --permanent --add-port=4789/udp
+sudo firewall-cmd --reload
