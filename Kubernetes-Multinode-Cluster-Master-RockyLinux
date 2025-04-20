@@ -68,5 +68,11 @@ echo "######### Installation completed Successfully ###########"
 echo "############ WAIT FOR PODS to GET READY #############"
 sleep 30
 kubectl get pods --all-namespaces
+kubeadm token create --print-join-command > kube-join.txt
+sleep 5
+echo "A kube-join.txt file is created in the current directory. This contains Join token for the node."
+echo "Execute this join token on node after running node installation Script"
+echo "############Installation Finished#################"
+
 
 
