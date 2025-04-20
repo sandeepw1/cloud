@@ -1,7 +1,9 @@
-echo "######### This script will install Kubernetes #############
-echo "#### Common Installation script ######"
-echo "##### Execute on Manager and worker nodes also ####"
+echo "######### This script will install Kubernetes #############"
+echo "############### This Script Will Install Kubernetes Master ###########"
 sleep 5 
+echo "Please Enter the Master IP Address"
+read mip
+echo "$mip      master" | sudo tee /etc/hosts
 ###Enable br_netfilter kernel module
 sudo tee /etc/modules-load.d/containerd.conf <<EOF
 overlay
@@ -51,3 +53,20 @@ sudo systemctl enable kubelet
 echo "#######Installation completed successfully #####"
 echo "#### Performing Master Specific Configuration ########"
 sleep 5
+echo "######Start cluster initialization on master node#####"
+sudo firewall-cmd --permanent --add-port={6443,2379,2380,10250,10251,10252,10257,10259,179}/tcp
+sudo firewall-cmd --permanent --add-port=4789/udp
+sudo firewall-cmd --reload
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16  --apiserver-advertise-address=master
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sleep 5
+echo "#########Installing the Flannel Network Add-on#############"
+kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+echo "######### Installation completed Successfully ###########"
+echo "############ WAIT FOR PODS to GET READY #############"
+sleep 30
+kubectl get pods --all-namespaces
+
+
