@@ -3,7 +3,7 @@ echo "############### This Script Will Install Kubernetes Master ###########"
 sleep 5 
 echo "Please Enter the Master IP Address"
 read mip
-echo "$mip      master" | sudo tee /etc/hosts
+echo "$mip      master" | sudo tee -a /etc/hosts
 ###Enable br_netfilter kernel module
 sudo tee /etc/modules-load.d/containerd.conf <<EOF
 overlay
