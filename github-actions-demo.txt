@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    name: Build and push docker image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      id: build-docker-image
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/actions-demo:latest
+    - name: Login to DockerHub
+      id: docker-hub
+      env: 
+        username: ${{secrets.DOCKER_USERNAME}}
+        password: ${{secrets.DOCKER_PASSWORD}}
+      run: docker login -u $username -p $password
+    - name: Push Docker Image
+      id: docker-push
+      run: docker push ${{secrets.DOCKER_USERNAME}}/actions-demo:latest  
+    
