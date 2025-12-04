@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven 'maven-3.9.11'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+                git branch: 'main', url: 'https://github.com/sandeepw1/actions2.git'
+
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+        stage('Docker Image') {
+            steps {
+                sh "docker build -t sandeepwalvekar/actions-demo:latest ."
+            }
+        }
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh "docker login -u ${DOCKER_USERNAME} --password-stdin <<< \"${DOCKER_PASSWORD}\""
+                    }
+                } 
+            }   
+        }    
+        stage('Push Image to Docker Hub') {
+            steps {
+                    sh "docker push sandeepwalvekar/actions-demo:latest"
+            }
+        }
+#        stage('Update Image Kubernetes') {
+#            steps {
+#                    sh "ssh -t admin@192.168.65.133 kubectl setimage deployment/demo1 actions-demo=sandeepwalvekar/actions-demo:latest"
+#            }
+#        }
+    }
+              post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target/*.war'
+                }
+            }
+    
+}
