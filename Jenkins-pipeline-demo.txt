@@ -38,11 +38,18 @@ pipeline {
                     sh "docker push sandeepwalvekar/actions-demo:latest"
             }
         }
-#        stage('Update Image Kubernetes') {
-#            steps {
-#                    sh "ssh -t admin@192.168.65.133 kubectl setimage deployment/demo1 actions-demo=sandeepwalvekar/actions-demo:latest"
-#            }
-#        }
+        stage('Update Container') {
+            steps {
+                   sh "docker stop demo1"
+                   sh "docker rm demo1"
+                   sh "docker run --name demo1 -p 9000:8080 -d sandeepwalvekar/hpcsa-app"
+            }
+        }
+//        stage('Update Image Kubernetes') {
+//            steps {
+//                   sh "ssh -t admin@192.168.65.133 kubectl setimage deployment/demo1 actions-demo=sandeepwalvekar/actions-demo:latest"
+//           }
+//       }
     }
               post {
                 // If Maven was able to run the tests, even if some of the test
