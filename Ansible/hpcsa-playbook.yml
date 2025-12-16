@@ -1,0 +1,33 @@
+---
+
+- name: Install epel repo and update
+  hosts: hpcsa
+  become: true
+
+  tasks: 
+  - name: Install httpd 
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Start and enable httpd 
+    service:
+      name: httpd
+      state: started
+      enabled: yes      
+
+  - name: copy index.html
+    copy:
+      src: index.html
+      dest: /var/www/html
+      owner: root
+      group: root
+      mode: 644
+
+  - name: open firewalld port
+    firewalld:
+      port: 80/tcp
+      zone: public
+      permanent: true
+      state: enabled
+      immediate: yes

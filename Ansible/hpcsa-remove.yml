@@ -1,0 +1,35 @@
+---
+
+- name: remove httpd 
+  hosts: hpcsa
+  become: true
+
+  tasks: 
+  - name: Stop and disable httpd 
+    service:
+      name: httpd
+      state: stopped
+
+  - name: delete index.html
+    file:
+      path: /var/www/html/index.html
+      state: absent
+
+  - name: remove httpd 
+    yum:
+      name: httpd
+      autoremove: yes
+      state: absent
+
+  - name: restrat daemon-reload
+    systemd:
+      daemon-reload: true
+      
+        
+  - name: close firewalld port
+    firewalld:
+      port: 80/tcp
+      zone: public
+      permanent: true
+      state: disabled
+      immediate: yes
